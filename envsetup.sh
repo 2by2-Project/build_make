@@ -638,11 +638,7 @@ function lunch()
         echo "to choose a different release use the form <product>-<release>-<variant>"
     fi
 
-    if (echo -n $1 | grep -q -e "^yaap_") ; then
-      CUSTOM_BUILD=$(echo -n $product | sed -e 's/^yaap_//g')
-    else
-      CUSTOM_BUILD=
-    fi
+    CUSTOM_BUILD=$(echo -n $product)
     export CUSTOM_BUILD
     CUSTOM_DEVICE=$CUSTOM_BUILD
     export CUSTOM_DEVICE
