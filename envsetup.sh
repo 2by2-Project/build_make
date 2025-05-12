@@ -557,11 +557,7 @@ function lunch()
         export TARGET_RELEASE=$release
     fi
 
-    if (echo -n $1 | grep -q -e "^yaap_") ; then
-      CUSTOM_BUILD=$(echo -n $product)
-    else
-      CUSTOM_BUILD=
-    fi
+    CUSTOM_BUILD=$(echo -n $product)
     export CUSTOM_BUILD
     CUSTOM_DEVICE=$CUSTOM_BUILD
     export CUSTOM_DEVICE
