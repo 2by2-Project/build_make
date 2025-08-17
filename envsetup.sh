@@ -505,6 +505,14 @@ function _lunch_meat()
     # Note this is the string "release", not the value of the variable.
     export TARGET_BUILD_TYPE=release
 
+    local no_kernel=$(_get_build_var_cached TARGET_NO_KERNEL)
+    local prebuilt_kernel=$(_get_build_var_cached TARGET_PREBUILT_KERNEL)
+    if [[ "$no_kernel" == "true" ]] || [ -n "$prebuilt_kernel" ]; then
+        unset INLINE_KERNEL_BUILDING
+    else
+        export INLINE_KERNEL_BUILDING=true
+    fi
+
     [[ -n "${ANDROID_QUIET_BUILD:-}" ]] || echo
 
     fixup_common_out_dir
@@ -627,6 +635,10 @@ function lunch()
         variant=$3
         if [[ -z $variant ]]; then
             variant=eng
+            if [[ $release == "user" ]] || [[ $release == "userdebug" ]] || [[ $release == "eng" ]]; then
+                variant=$release
+                ogFormat=true
+            fi
         fi
     fi
 
@@ -636,6 +648,7 @@ function lunch()
         release=$(grep "BUILD_ID" build/make/core/build_id.mk | tail -1 | cut -d '=' -f 2 | cut -d '.' -f 1 | tr '[:upper:]' '[:lower:]')
         echo "automatically selected latest release: ${release}"
         echo "to choose a different release use the form <product>-<release>-<variant>"
+        echo "or <product> <release> <variant>"
     fi
 
     CUSTOM_BUILD=$(echo -n $product)
